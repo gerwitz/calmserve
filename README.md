@@ -5,6 +5,7 @@
 service that exposes one generated Gemtext tree over Gemini and Spartan.
 
 The image is published as `ghcr.io/gerwitz/smolhost`.
+Published tags contain both `linux/amd64` and `linux/arm64` images.
 
 ## Runtime layout
 
