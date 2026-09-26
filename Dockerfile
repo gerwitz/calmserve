@@ -27,7 +27,7 @@ ENV SMALLWEB_ROOT=/srv/smallweb
 ENV SPARTAN_LISTEN=0.0.0.0:3000
 
 COPY --from=smallweb-build /tmp/smallweb /usr/local/bin/smallweb
-COPY start.sh /usr/local/bin/start-smolhost
+COPY --chmod=755 start.sh /usr/local/bin/start-smolhost
 
 EXPOSE 80 1965 3000
 
