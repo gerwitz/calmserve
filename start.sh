@@ -6,6 +6,8 @@ certificate_directory="${GEMINI_CERTIFICATE_DIRECTORY:-/var/lib/smallweb/certifi
 mkdir -p "$certificate_directory"
 chown -R nginx:nginx "$certificate_directory"
 
+/usr/local/bin/generate-buildtime-badge
+
 /docker-entrypoint.sh nginx -g "daemon off;" &
 nginx_pid=$!
 

@@ -13,6 +13,8 @@ Published tags contain both `linux/amd64` and `linux/arm64` images.
 - Gemini and Spartan serve Gemtext from `/srv/smallweb`.
 - Requests under `/media/*` are fetched from the configured HTTPS media origin.
 - Gemini certificates are stored in `/var/lib/smallweb/certificates`.
+- The current container start time is exposed as a status badge at
+  `/.well-known/smolhost/buildtime.svg`.
 
 The certificate directory must be persisted across deployments. Gemini clients
 trust self-signed certificates across visits, so replacing a certificate causes
@@ -28,9 +30,14 @@ warnings.
 | `GEMINI_CERTIFICATE_DIRECTORY` | `/var/lib/smallweb/certificates` | Persistent Gemini certificates |
 | `SPARTAN_LISTEN` | `0.0.0.0:3000` | Spartan listener |
 | `MEDIA_ORIGIN_HOST` | unset | HTTPS host used for `/media/*` |
+| `SMOLHOST_BUILD_TIME` | current UTC time | Optional badge time in `YYYY-MM-DD HH:MM` format |
 
 Spartan uploads are intentionally rejected. Static resources and media are
 read-only on both protocols. Media responses are limited to 64 MiB.
+
+The badge follows the conventional 20-pixel README badge format. It reads
+`Built YYYY-MM-DD HH:MM`, with a white-on-black label and black-on-white UTC
+timestamp. It is generated atomically before Nginx starts.
 
 ## Derived images
 
