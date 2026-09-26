@@ -24,13 +24,22 @@ impl Config {
         Ok(Self {
             certificate_directory: environment(
                 "GEMINI_CERTIFICATE_DIRECTORY",
-                "/var/lib/smallweb/certificates",
+                "/var/lib/calmserve/certificates",
             )
             .into(),
             gemini_address: environment("GEMINI_LISTEN", "0.0.0.0:1965"),
-            hostname: environment("SMALLWEB_HOSTNAME", "hans.gerwitz.com"),
+            hostname: environment_with_legacy(
+                "CALMSERVE_HOSTNAME",
+                "SMALLWEB_HOSTNAME",
+                "hans.gerwitz.com",
+            ),
             media_origin,
-            root: environment("SMALLWEB_ROOT", "_site/editions/gemini").into(),
+            root: environment_with_legacy(
+                "CALMSERVE_ROOT",
+                "SMALLWEB_ROOT",
+                "_site/editions/gemini",
+            )
+            .into(),
             spartan_address: environment("SPARTAN_LISTEN", "0.0.0.0:3000"),
         })
     }
@@ -53,6 +62,14 @@ fn environment(name: &str, fallback: &str) -> String {
     env::var(name)
         .ok()
         .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| fallback.to_owned())
+}
+
+fn environment_with_legacy(name: &str, legacy_name: &str, fallback: &str) -> String {
+    env::var(name)
+        .ok()
+        .filter(|value| !value.is_empty())
+        .or_else(|| env::var(legacy_name).ok().filter(|value| !value.is_empty()))
         .unwrap_or_else(|| fallback.to_owned())
 }
 

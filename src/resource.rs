@@ -147,7 +147,7 @@ impl ResourceService {
         let response = match self
             .client
             .get(target)
-            .header("User-Agent", "hans.gerwitz.com-smallweb/1")
+            .header("User-Agent", "hans.gerwitz.com-calmserve/1")
             .send()
             .await
         {

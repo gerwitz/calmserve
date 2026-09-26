@@ -122,6 +122,23 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 
 [[package]]
+name = "calmserve"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "futures-util",
+ "mime_guess",
+ "percent-encoding",
+ "rcgen",
+ "reqwest",
+ "rustls",
+ "tempfile",
+ "tokio",
+ "twinstar",
+ "url",
+]
+
+[[package]]
 name = "cc"
 version = "1.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -976,23 +993,6 @@ name = "smallvec"
 version = "1.16.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f9395f0f0eee849a9b707b2f06bb92a6a422090e2123bb2ef8e87a0e61892a8e"
-
-[[package]]
-name = "smallweb"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "futures-util",
- "mime_guess",
- "percent-encoding",
- "rcgen",
- "reqwest",
- "rustls",
- "tempfile",
- "tokio",
- "twinstar",
- "url",
-]
 
 [[package]]
 name = "socket2"

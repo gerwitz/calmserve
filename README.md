@@ -1,20 +1,20 @@
-# smolhost
+# calmserve
 
-`smolhost` is the runtime base image for
+`calmserve` is the runtime base image for
 [hans.gerwitz.com](https://hans.gerwitz.com/). It combines Nginx with a Rust
 service that exposes one generated Gemtext tree over Gemini and Spartan.
 
-The image is published as `ghcr.io/gerwitz/smolhost`.
+The image is published as `ghcr.io/gerwitz/calmserve`.
 Published tags contain both `linux/amd64` and `linux/arm64` images.
 
 ## Runtime layout
 
 - Nginx serves HTTP content from `/usr/share/nginx/html`.
-- Gemini and Spartan serve Gemtext from `/srv/smallweb`.
+- Gemini and Spartan serve Gemtext from `/srv/calmserve`.
 - Requests under `/media/*` are fetched from the configured HTTPS media origin.
-- Gemini certificates are stored in `/var/lib/smallweb/certificates`.
+- Gemini certificates are stored in `/var/lib/calmserve/certificates`.
 - The current content version's first deployment time is exposed as a status badge at
-  `/.well-known/smolhost/buildtime.svg`.
+  `/.well-known/calmserve/status.svg`.
 
 The certificate directory must be persisted across deployments. Gemini clients
 trust self-signed certificates across visits, so replacing a certificate causes
@@ -24,35 +24,38 @@ warnings.
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `SMALLWEB_HOSTNAME` | `hans.gerwitz.com` | Host accepted by Gemini and Spartan |
-| `SMALLWEB_ROOT` | `/srv/smallweb` | Generated Gemtext content |
+| `CALMSERVE_HOSTNAME` | `hans.gerwitz.com` | Host accepted by Gemini and Spartan |
+| `CALMSERVE_ROOT` | `/srv/calmserve` | Generated Gemtext content |
 | `GEMINI_LISTEN` | `0.0.0.0:1965` | Gemini listener |
-| `GEMINI_CERTIFICATE_DIRECTORY` | `/var/lib/smallweb/certificates` | Persistent Gemini certificates |
+| `GEMINI_CERTIFICATE_DIRECTORY` | `/var/lib/calmserve/certificates` | Persistent Gemini certificates |
 | `SPARTAN_LISTEN` | `0.0.0.0:3000` | Spartan listener |
 | `MEDIA_ORIGIN_HOST` | unset | HTTPS host used for `/media/*` |
-| `SMOLHOST_CONTENT_ROOT` | `/usr/share/nginx/html` | Content tree fingerprinted for the badge |
-| `SMOLHOST_BUILD_TIME` | current UTC time | Optional first-seen time in `YYYY-MM-DD HH:MM` format |
+| `CALMSERVE_CONTENT_ROOT` | `/usr/share/nginx/html` | Content tree fingerprinted for the badge |
+| `CALMSERVE_UPDATE_TIME` | current UTC time | Optional first-seen time in `YYYY-MM-DD HH:MM` format |
 
 Spartan uploads are intentionally rejected. Static resources and media are
 read-only on both protocols. Media responses are limited to 64 MiB.
 
 The badge follows the conventional 20-pixel README badge format. It reads
 `Updated YYYY-MM-DD HH:MM`, with a white-on-black label and black-on-white UTC
-timestamp. Before Nginx starts, `smolhost` hashes every file in the content
+timestamp. Before Nginx starts, `calmserve` hashes every file in the content
 tree and looks up the digest in a registry stored beside the persistent Gemini
 certificate. New content receives the current time; restarts and rollbacks
 reuse the digest's original timestamp. Badge generation is atomic.
+
+The former `SMALLWEB_HOSTNAME`, `SMALLWEB_ROOT`, and `SMOLHOST_*` environment
+variables remain temporary compatibility aliases.
 
 ## Derived images
 
 A derived site image supplies its Nginx template and generated content:
 
 ```dockerfile
-FROM ghcr.io/gerwitz/smolhost:latest
+FROM ghcr.io/gerwitz/calmserve:latest
 
 COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY _site /usr/share/nginx/html
-COPY _site/editions/gemini /srv/smallweb
+COPY _site/editions/gemini /srv/calmserve
 ```
 
 The container exposes HTTP on `80`, Gemini on `1965`, and Spartan on `3000`.

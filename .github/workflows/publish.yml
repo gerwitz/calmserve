@@ -30,14 +30,14 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and publish smolhost
+      - name: Build and publish calmserve
         uses: docker/build-push-action@v6
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ghcr.io/gerwitz/smolhost:latest
-            ghcr.io/gerwitz/smolhost:sha-${{ github.sha }}
+            ghcr.io/gerwitz/calmserve:latest
+            ghcr.io/gerwitz/calmserve:sha-${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max

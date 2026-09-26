@@ -2,14 +2,14 @@
 
 set -eu
 
-certificate_directory="${GEMINI_CERTIFICATE_DIRECTORY:-/var/lib/smallweb/certificates}"
-content_root="${SMOLHOST_CONTENT_ROOT:-/usr/share/nginx/html}"
-output="${SMOLHOST_BUILD_BADGE_PATH:-/usr/share/nginx/html/.well-known/smolhost/buildtime.svg}"
-state_file="${SMOLHOST_BUILD_STATE:-${certificate_directory}/content-builds}"
+certificate_directory="${GEMINI_CERTIFICATE_DIRECTORY:-/var/lib/calmserve/certificates}"
+content_root="${CALMSERVE_CONTENT_ROOT:-${SMOLHOST_CONTENT_ROOT:-/usr/share/nginx/html}}"
+output="${CALMSERVE_BADGE_PATH:-${SMOLHOST_BUILD_BADGE_PATH:-/usr/share/nginx/html/.well-known/calmserve/status.svg}}"
+state_file="${CALMSERVE_UPDATE_STATE:-${SMOLHOST_BUILD_STATE:-${certificate_directory}/content-updates}}"
 
 if [ ! -d "$content_root" ]
 then
-  echo "SMOLHOST_CONTENT_ROOT is not a directory: $content_root" >&2
+  echo "CALMSERVE_CONTENT_ROOT is not a directory: $content_root" >&2
   exit 1
 fi
 
@@ -32,7 +32,7 @@ build_time=$(awk -F '|' -v fingerprint="$fingerprint" '
 
 if [ -z "$build_time" ]
 then
-  build_time="${SMOLHOST_BUILD_TIME:-$(date -u "+%Y-%m-%d %H:%M")}"
+  build_time="${CALMSERVE_UPDATE_TIME:-${SMOLHOST_BUILD_TIME:-$(date -u "+%Y-%m-%d %H:%M")}}"
   printf '%s|%s\n' "$fingerprint" "$build_time" >> "$state_file"
 fi
 
@@ -40,7 +40,7 @@ case "$build_time" in
   ????-??-??\ ??:??)
     ;;
   *)
-    echo "SMOLHOST_BUILD_TIME must use YYYY-MM-DD HH:MM" >&2
+    echo "CALMSERVE_UPDATE_TIME must use YYYY-MM-DD HH:MM" >&2
     exit 1
     ;;
 esac
