@@ -14,7 +14,7 @@ Published tags contain both `linux/amd64` and `linux/arm64` images.
 - Requests under `/media/*` are fetched from the configured HTTPS media origin.
 - Gemini certificates are stored in `/var/lib/calmserve/certificates`.
 - The current content version's first deployment time is exposed as a status badge at
-  `/.well-known/calmserve/status.svg`.
+  `/.well-known/calmserve/updated.svg`.
 
 The certificate directory must be persisted across deployments. Gemini clients
 trust self-signed certificates across visits, so replacing a certificate causes
@@ -37,7 +37,7 @@ Spartan uploads are intentionally rejected. Static resources and media are
 read-only on both protocols. Media responses are limited to 64 MiB.
 
 The badge follows the conventional 20-pixel README badge format. It reads
-`Updated YYYY-MM-DD HH:MM`, with a white-on-black label and black-on-white UTC
+`Updated YYYY-MM-DD HH:MM UTC`, with a white-on-black label and black-on-white
 timestamp. Before Nginx starts, `calmserve` hashes every file in the content
 tree and looks up the digest in a registry stored beside the persistent Gemini
 certificate. New content receives the current time; restarts and rollbacks

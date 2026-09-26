@@ -4,7 +4,7 @@ set -eu
 
 certificate_directory="${GEMINI_CERTIFICATE_DIRECTORY:-/var/lib/calmserve/certificates}"
 content_root="${CALMSERVE_CONTENT_ROOT:-${SMOLHOST_CONTENT_ROOT:-/usr/share/nginx/html}}"
-output="${CALMSERVE_BADGE_PATH:-${SMOLHOST_BUILD_BADGE_PATH:-/usr/share/nginx/html/.well-known/calmserve/status.svg}}"
+output="${CALMSERVE_BADGE_PATH:-${SMOLHOST_BUILD_BADGE_PATH:-/usr/share/nginx/html/.well-known/calmserve/updated.svg}}"
 state_file="${CALMSERVE_UPDATE_STATE:-${SMOLHOST_BUILD_STATE:-${certificate_directory}/content-updates}}"
 
 if [ ! -d "$content_root" ]
@@ -49,19 +49,19 @@ mkdir -p "$(dirname "$output")"
 temporary="${output}.tmp"
 
 cat > "$temporary" <<EOF
-<svg xmlns="http://www.w3.org/2000/svg" width="182" height="20" role="img" aria-label="Updated ${build_time}">
+<svg xmlns="http://www.w3.org/2000/svg" width="212" height="20" role="img" aria-label="Updated ${build_time} UTC">
   <title>Updated ${build_time} UTC</title>
   <clipPath id="round">
-    <rect width="182" height="20" rx="3"/>
+    <rect width="212" height="20" rx="3"/>
   </clipPath>
   <g clip-path="url(#round)">
-    <rect width="182" height="20" fill="#fff"/>
+    <rect width="212" height="20" fill="#fff"/>
     <rect width="60" height="20" fill="#000"/>
   </g>
-  <rect x=".5" y=".5" width="181" height="19" rx="3" fill="none" stroke="#000"/>
+  <rect x=".5" y=".5" width="211" height="19" rx="3" fill="none" stroke="#000"/>
   <g font-family="Verdana,Geneva,DejaVu Sans,sans-serif" font-size="11" text-anchor="middle">
     <text x="30" y="14" fill="#fff">Updated</text>
-    <text x="121" y="14" fill="#000">${build_time}</text>
+    <text x="136" y="14" fill="#000">${build_time} UTC</text>
   </g>
 </svg>
 EOF
