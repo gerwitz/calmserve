@@ -132,6 +132,7 @@ dependencies = [
  "rcgen",
  "reqwest",
  "rustls",
+ "serde_json",
  "tempfile",
  "tokio",
  "twinstar",
